@@ -1,0 +1,18 @@
+{
+  "name": "my-vercel-project",
+  "version": "1.0.0",
+  "description": "A project to handle form submissions using Vercel serverless functions.",
+  "main": "api/contact.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "vercel build",
+    "start": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "nodemailer": "^6.7.2"
+  },
+  "engines": {
+    "node": "14.x"
+  }
+}
