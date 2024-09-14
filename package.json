@@ -1,5 +1,5 @@
 {
-  "name": "my-vercel-project",
+  "name": "form-backend-shankar-4aa6",
   "version": "1.0.0",
   "description": "A project to handle form submissions using Vercel serverless functions.",
   "main": "api/contact.js",
