@@ -10,7 +10,7 @@
     "deploy": "vercel --prod"
   },
   "dependencies": {
-    "nodemailer": "^6.7.2"
+    "nodemailer": "^6.7.2",
     "node-fetch": "^3.2.6"
   },
   "engines": {
