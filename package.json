@@ -1,5 +1,5 @@
 {
-  "name": "my-vercel-project",
+  "name": "my-vercel-project-shankar",
   "version": "1.0.0",
   "description": "A project to handle form submissions using Vercel serverless functions.",
   "main": "api/contact.js",
