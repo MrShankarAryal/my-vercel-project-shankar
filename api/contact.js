@@ -26,7 +26,7 @@ export default async function handler(req, res) {
 
     try {
       await transporter.sendMail(mailOptions);
-      res.status(200).json({ message: 'Form submission successful' });
+      res.status(200).json({ message: 'Form submission successful.\n When you submitted you also give IP Address to us.\n If any voilence notice we will be sitting in your home.\n Thank you please be back to website' });
     } catch (error) {
       res.status(500).json({ message: 'Error sending email' });
     }
