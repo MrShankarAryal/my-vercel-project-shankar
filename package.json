@@ -5,7 +5,7 @@
   "main": "api/contact.js",
   "scripts": {
     "dev": "vercel dev",
-    "build": "vercel build",
+    "build": "echo 'No build step required'",
     "start": "vercel dev",
     "deploy": "vercel --prod"
   },
