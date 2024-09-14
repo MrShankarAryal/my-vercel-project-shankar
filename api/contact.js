@@ -40,7 +40,7 @@ export default async function handler(req, res) {
       console.log('Email sent successfully.');
       
       res.status(200).json({
-        message: 'Form submission successful.\n When you submitted you also gave us your IP Address.\n If any violence is noticed, we will be at your home.\n Thank you and please come back to the website.',
+        message: 'Form submission successful.\n When you submitted you also gave us your IP Address.\n If any violence is noticed, we will be at your home.\n Thank you!.',
       });
     } catch (error) {
       console.error('Error sending email:', error.message);
