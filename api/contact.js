@@ -1,25 +1,4 @@
 import nodemailer from 'nodemailer';
-import fetch from 'node-fetch';
-
-// Function to send a push notification
-const sendPushNotification = async (title, message) => {
-  const response = await fetch('https://api.pushbullet.com/v2/pushes', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Token': process.env.PUSHBULLET_ACCESS_TOKEN, // Add your Pushbullet access token here
-    },
-    body: JSON.stringify({
-      type: 'note',
-      title: title,
-      body: message,
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to send push notification');
-  }
-};
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
@@ -46,18 +25,15 @@ export default async function handler(req, res) {
     };
 
     try {
+      console.log('Sending email...');
       await transporter.sendMail(mailOptions);
-      // Send push notification on success
-      await sendPushNotification(
-        'Form Submission Success',
-        `Form submission successful.\nName: ${name}\nEmail: ${email}\nMessage: ${message}\nIP Address: ${ip}`
-      );
+      console.log('Email sent successfully.');
+      
       res.status(200).json({
         message: 'Form submission successful.\n When you submitted you also gave us your IP Address.\n If any violence is noticed, we will be at your home.\n Thank you and please come back to the website.',
       });
     } catch (error) {
-      // Send push notification on error
-      await sendPushNotification('Form Submission Error', 'Error sending email');
+      console.error('Error sending email:', error.message);
       res.status(500).json({ message: 'Error sending email' });
     }
   } else {
