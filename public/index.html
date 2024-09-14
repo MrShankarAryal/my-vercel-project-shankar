@@ -1,126 +1,54 @@
-<html>
-
-<head>
-    <style>
-        /* styles.css or within a <style> tag */
-        #popup-box {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            border: 1px solid #ccc;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
-
-        #popup-close {
-            margin-top: 10px;
-        }
-    </style>
-    <title> </title>
-
-</head>
-
-<body>
-
-
-
-    <section class="section contact" id="contact">
-        <div class="container">
-
-            <div class="contact-card">
-
-                <p class="card-subtitle">Don't be shy</p>
-
-                <h2 class="h2 section-title">Drop Me a Line</h2>
-
-                <div class="wrapper">
-
-                    <form action="https://my-vercel-project-shankar-2o3kn96ua.vercel.app/api/contact" method="POST"
-                        class="contact-form" id="contact-form">
-
-                        <input type="text" name="name" placeholder="Name" required class="contact-input">
-
-                        <input type="email" name="email" placeholder="Email" required class="contact-input">
-
-                        <textarea name="message" placeholder="Message" required class="contact-input"></textarea>
-
-                        <button type="submit" class="btn-submit">Submit Message</button>
-
-                    </form>
-
-                    <ul class="contact-list">
-                        <li class="contact-item">
-                            <div class="contact-icon">
-                                <ion-icon name="location"></ion-icon>
-                            </div>
-                            <div>
-                                <h3 class="contact-item-title">Address</h3>
-                                <address class="contact-item-link">
-                                    Gaindakot-5, Nawalpur-E, Nepal
-                                </address>
-                            </div>
-                        </li>
-
-                        <li class="contact-item">
-                            <div class="contact-icon">
-                                <ion-icon name="mail"></ion-icon>
-                            </div>
-                            <div>
-                                <h3 class="contact-item-title">Email</h3>
-                                <a href="mailto:mr.aryalcode@gamil.com"
-                                    class="contact-item-link">mr.aryalcode@gamil.com</a>
-                            </div>
-                        </li>
-                    </ul>
-
-                </div>
-
-            </div>
-
+<section class="section contact" id="contact">
+    <div class="container">
+  
+      <div class="contact-card">
+  
+        <p class="card-subtitle">Don't be shy</p>
+  
+        <h2 class="h2 section-title">Drop Me a Line</h2>
+  
+        <div class="wrapper">
+  
+          <form action="api/contact.js" method="POST" class="contact-form" id="contact-form">
+            
+            <input type="text" name="name" placeholder="Name" required class="contact-input">
+  
+            <input type="email" name="email" placeholder="Email" required class="contact-input">
+  
+            <textarea name="message" placeholder="Message" required class="contact-input"></textarea>
+  
+            <button type="submit" class="btn-submit">Submit Message</button>
+  
+          </form>
+  
+          <ul class="contact-list">
+            <li class="contact-item">
+              <div class="contact-icon">
+                <ion-icon name="location"></ion-icon>
+              </div>
+              <div>
+                <h3 class="contact-item-title">Address</h3>
+                <address class="contact-item-link">
+                  Gaindakot-5, Nawalpur-E, Nepal
+                </address>
+              </div>
+            </li>
+  
+            <li class="contact-item">
+              <div class="contact-icon">
+                <ion-icon name="mail"></ion-icon>
+              </div>
+              <div>
+                <h3 class="contact-item-title">Email</h3>
+                <a href="mailto:mr.aryalcode@gamil.com" class="contact-item-link">mr.aryalcode@gamil.com</a>
+              </div>
+            </li>
+          </ul>
+  
         </div>
-    </section>
-
-    <!-- In the <head> or at the end of the <body> section in your HTML file -->
-    <script>
-        document.getElementById('contact-form').addEventListener('submit', async function (event) {
-            event.preventDefault(); // Prevent default form submission
-
-            const form = event.target;
-            const formData = new FormData(form);
-
-            try {
-                const response = await fetch('/api/contact', {
-                    method: 'POST',
-                    body: new URLSearchParams(formData)
-                });
-
-                const result = await response.json();
-
-                if (response.ok) {
-                    showPopup('Form submission successful!');
-                } else {
-                    showPopup('Error sending message. Please try again.');
-                }
-            } catch (error) {
-                showPopup('Error sending message. Please try again.');
-            }
-        });
-
-        function showPopup(message) {
-            const popupBox = document.getElementById('popup-box');
-            const popupMessage = document.getElementById('popup-message');
-
-            popupMessage.textContent = message;
-            popupBox.style.display = 'block';
-
-            document.getElementById('popup-close').addEventListener('click', function () {
-                popupBox.style.display = 'none';
-            });
-        }
-    </script>
-</body>
-
-</html>
+  
+      </div>
+  
+    </div>
+  </section>
+  
