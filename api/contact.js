@@ -1,29 +1,51 @@
 import nodemailer from 'nodemailer';
 import UAParser from 'ua-parser-js';
 
+// Geolocation API call function (browser-side)
+const getUserGeolocation = () => {
+  return new Promise((resolve, reject) => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    } else {
+      reject('Geolocation not supported by the browser.');
+    }
+  });
+};
+
 export default async function handler(req, res) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // Handle OPTIONS request for CORS preflight
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
-  
+
   if (req.method === 'POST') {
     const { name, email, message } = req.body;
 
     // Collect additional information
     const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     const userAgent = req.headers['user-agent'];
+    const referer = req.headers['referer'] || 'No referer';
+    const origin = req.headers['origin'] || 'No origin';
     const parser = new UAParser(userAgent);
     const browserInfo = parser.getBrowser();
     const osInfo = parser.getOS();
     const deviceInfo = parser.getDevice();
+    const timeOfSubmission = new Date().toISOString();
 
-    // Set up the email transport
+    // Additional security feature: Geolocation (if supported by frontend)
+    let geolocation = '';
+    try {
+      const position = await getUserGeolocation();
+      geolocation = `Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`;
+    } catch (error) {
+      geolocation = 'Unable to retrieve geolocation.';
+    }
+
+    // Set up email transport
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -32,28 +54,59 @@ export default async function handler(req, res) {
       },
     });
 
-    // Prepare additional information
-    const additionalInfo = `
-IP Address: ${ip}
-Browser: ${browserInfo.name} ${browserInfo.version}
-Operating System: ${osInfo.name} ${osInfo.version}
-Device: ${deviceInfo.vendor} ${deviceInfo.model} ${deviceInfo.type}
-User Agent: ${userAgent}
-    `;
-
-    // Email message details
+    // Prepare HTML content for the email
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: 'shankararyal737@gmail.com',
-      subject: 'New Contact Form Submission',
-      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}\n\nAdditional Information:\n${additionalInfo}`,
+      subject: '📬 New Contact Form Submission with Enhanced Security Details',
+      html: `
+        <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; padding: 20px; border: 1px solid #eee; background-color: #f9f9f9;">
+          <h2 style="color: #2b79c2; border-bottom: 2px solid #2b79c2; padding-bottom: 10px;">📧 New Contact Form Submission</h2>
+          
+          <div style="padding: 10px 0;">
+            <p><strong style="color: #333;">Name:</strong> <span style="color: #555;">${name}</span></p>
+            <p><strong style="color: #333;">Email:</strong> <span style="color: #555;">${email}</span></p>
+            <p><strong style="color: #333;">Message:</strong></p>
+            <p style="color: #555; background-color: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+              ${message}
+            </p>
+          </div>
+
+          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+
+          <h3 style="color: #2b79c2; border-bottom: 2px solid #2b79c2; padding-bottom: 10px;">📋 Additional Information</h3>
+
+          <div style="padding: 10px 0;">
+            <p><strong style="color: #333;">IP Address:</strong> <span style="color: #555;">${ip}</span></p>
+            <p><strong style="color: #333;">Browser:</strong> <span style="color: #555;">${browserInfo.name} ${browserInfo.version}</span></p>
+            <p><strong style="color: #333;">Operating System:</strong> <span style="color: #555;">${osInfo.name} ${osInfo.version}</span></p>
+            <p><strong style="color: #333;">Device:</strong> <span style="color: #555;">${deviceInfo.vendor || 'Unknown Vendor'} ${deviceInfo.model || 'Unknown Model'} ${deviceInfo.type || 'Unknown Type'}</span></p>
+            <p><strong style="color: #333;">User Agent:</strong> <span style="color: #555;">${userAgent}</span></p>
+            <p><strong style="color: #333;">Referer:</strong> <span style="color: #555;">${referer}</span></p>
+            <p><strong style="color: #333;">Origin:</strong> <span style="color: #555;">${origin}</span></p>
+            <p><strong style="color: #333;">Geolocation:</strong> <span style="color: #555;">${geolocation}</span></p>
+            <p><strong style="color: #333;">Time of Submission:</strong> <span style="color: #555;">${timeOfSubmission}</span></p>
+          </div>
+
+          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+
+          <p style="color: #333; padding: 15px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+            This email contains the detailed information regarding the recent form submission from your website.
+          </p>
+
+          <p style="text-align: center; margin-top: 20px;">
+            <strong style="color: #2b79c2;">Your Website Team</strong><br>
+            <a href="https://yourwebsite.com" style="color: #2b79c2; text-decoration: none;">Visit our website</a>
+          </p>
+        </div>
+      `,
     };
 
     try {
       console.log('Sending email...');
       await transporter.sendMail(mailOptions);
       console.log('Email sent successfully.');
-      
+
       res.status(200).json({
         message: 'Form submission successful. Thank you for your message.',
       });
