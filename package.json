@@ -1,7 +1,6 @@
 {
   "name": "my-vercel-project-shankar",
   "version": "1.0.0",
-  "type": "module",
   "description": "A project to handle form submissions using Vercel serverless functions.",
   "main": "api/contact.js",
   "scripts": {
