@@ -1,5 +1,16 @@
-const nodemailer = require('nodemailer');
-const UAParser = require('ua-parser-js');
+import nodemailer from 'nodemailer';
+import UAParser from 'ua-parser-js';
+
+// Geolocation API call function (browser-side)
+const getUserGeolocation = () => {
+  return new Promise((resolve, reject) => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    } else {
+      reject('Geolocation not supported by the browser.');
+    }
+  });
+};
 
 export default async function handler(req, res) {
   // Set CORS headers
@@ -12,8 +23,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method === 'POST') {
-    const { name, email, message, geolocation } = req.body;
-
+    const { name, email, message } = req.body;
 
     // Collect additional information
     const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
@@ -31,7 +41,6 @@ export default async function handler(req, res) {
     try {
       const position = await getUserGeolocation();
       geolocation = `Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`;
-      
     } catch (error) {
       geolocation = 'Unable to retrieve geolocation.';
     }
@@ -75,8 +84,7 @@ export default async function handler(req, res) {
             <p><strong style="color: #333;">User Agent:</strong> <span style="color: #555;">${userAgent}</span></p>
             <p><strong style="color: #333;">Referer:</strong> <span style="color: #555;">${referer}</span></p>
             <p><strong style="color: #333;">Origin:</strong> <span style="color: #555;">${origin}</span></p>
-            <p><strong style="color: #333;">Geolocation:</strong> <span style="color: #555;">${geolocation.latitude}, ${geolocation.longitude}</span></p>
-
+            <p><strong style="color: #333;">Geolocation:</strong> <span style="color: #555;">${geolocation}</span></p>
             <p><strong style="color: #333;">Time of Submission:</strong> <span style="color: #555;">${timeOfSubmission}</span></p>
           </div>
 
@@ -87,7 +95,7 @@ export default async function handler(req, res) {
           </p>
 
           <p style="text-align: center; margin-top: 20px;">
-            <strong style="color: #2b79c2;">Shankar Aryal Website</strong><br>
+            <strong style="color: #2b79c2;">our Website Team -Shankar Aryal</strong><br>
             <a href="https://mrshankararyal.github.io/" style="color: #2b79c2; text-decoration: none;">Visit our website</a>
           </p>
         </div>
