@@ -1,6 +1,5 @@
-import nodemailer from 'nodemailer';
-import UAParser from 'ua-parser-js';
-
+const nodemailer = require('nodemailer');
+const UAParser = require('ua-parser-js');
 
 export default async function handler(req, res) {
   // Set CORS headers
