@@ -58,7 +58,7 @@ export default async function handler(req, res) {
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: 'shankararyal737@gmail.com',
-      subject: '📬 New Contact Form Submission with Enhanced Security Details',
+      subject: '📬 New Contact Form Submission',
       html: `
         <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; padding: 20px; border: 1px solid #eee; background-color: #f9f9f9;">
           <h2 style="color: #2b79c2; border-bottom: 2px solid #2b79c2; padding-bottom: 10px;">📧 New Contact Form Submission</h2>
@@ -91,12 +91,12 @@ export default async function handler(req, res) {
           <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
 
           <p style="color: #333; padding: 15px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
-            This email contains the detailed information regarding the recent form submission from your website.
+            This email contains the detailed information regarding the recent form submission from our website.
           </p>
 
           <p style="text-align: center; margin-top: 20px;">
-            <strong style="color: #2b79c2;">Your Website Team</strong><br>
-            <a href="https://yourwebsite.com" style="color: #2b79c2; text-decoration: none;">Visit our website</a>
+            <strong style="color: #2b79c2;">Shankar Aryal Website</strong><br>
+            <a href="https://mrshankararyal.github.io/" style="color: #2b79c2; text-decoration: none;">Visit our website</a>
           </p>
         </div>
       `,
