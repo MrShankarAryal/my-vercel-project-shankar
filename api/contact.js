@@ -134,6 +134,11 @@ export default async function handler(req, res) {
         Source: process.env.SENDER_EMAIL,
       };
 
+      // Ensure SENDER_EMAIL is set
+      if (!process.env.SENDER_EMAIL) {
+        throw new Error('SENDER_EMAIL environment variable is not set');
+      }
+
       const command = new SendEmailCommand(params);
       await sesClient.send(command);
 
