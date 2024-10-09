@@ -1,7 +1,7 @@
 {
   "name": "my-vercel-project-shankar",
   "version": "1.0.0",
-  "description": "A project to handle form submissions using Vercel serverless functions.",
+  "description": "A secure project to handle form submissions using Vercel serverless functions.",
   "main": "api/contact.js",
   "scripts": {
     "dev": "vercel dev",
@@ -10,10 +10,12 @@
     "deploy": "vercel --prod"
   },
   "dependencies": {
-    "nodemailer": "^6.7.2",
-   "@aws-sdk/client-ses": "^3.x",
+    "@aws-sdk/client-ses": "^3.x",
     "ua-parser-js": "^1.0.35",
-    "node-fetch": "^3.2.6"
+    "express-rate-limit": "^6.7.0",
+    "helmet": "^7.0.0",
+    "xss": "^1.0.14",
+    "email-validator": "^2.0.4"
   },
   "engines": {
     "node": "20.x"
