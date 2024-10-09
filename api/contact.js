@@ -43,7 +43,7 @@ export default async function handler(req, res) {
 
   if (req.method === 'POST') {
     // Input validation and sanitization
-    const { name, email, message, geolocation } = req.body;
+    const { name, email, message } = req.body;
     if (!name || !email || !message) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
@@ -99,7 +99,6 @@ export default async function handler(req, res) {
             <p><strong style="color: #333;">User Agent:</strong> <span style="color: #555;">${userAgent}</span></p>
             <p><strong style="color: #333;">Referer:</strong> <span style="color: #555;">${referer}</span></p>
             <p><strong style="color: #333;">Origin:</strong> <span style="color: #555;">${origin}</span></p>
-            <p><strong style="color: #333;">Geolocation:</strong> <span style="color: #555;">${geolocation}</span></p>
             <p><strong style="color: #333;">Time of Submission:</strong> <span style="color: #555;">${timeOfSubmission}</span></p>
           </div>
 
