@@ -1,17 +1,6 @@
 import nodemailer from 'nodemailer';
 import UAParser from 'ua-parser-js';
 
-// Geolocation API call function (browser-side)
-const getUserGeolocation = () => {
-  return new Promise((resolve, reject) => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(resolve, reject);
-    } else {
-      reject('Geolocation not supported by the browser.');
-    }
-  });
-};
-
 export default async function handler(req, res) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -35,15 +24,6 @@ export default async function handler(req, res) {
     const osInfo = parser.getOS();
     const deviceInfo = parser.getDevice();
     const timeOfSubmission = new Date().toISOString();
-
-    // Additional security feature: Geolocation (if supported by frontend)
-    let geolocation = '';
-    try {
-      const position = await getUserGeolocation();
-      geolocation = `Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`;
-    } catch (error) {
-      geolocation = 'Unable to retrieve geolocation.';
-    }
 
     // Set up email transport
     const transporter = nodemailer.createTransport({
@@ -84,7 +64,6 @@ export default async function handler(req, res) {
             <p><strong style="color: #333;">User Agent:</strong> <span style="color: #555;">${userAgent}</span></p>
             <p><strong style="color: #333;">Referer:</strong> <span style="color: #555;">${referer}</span></p>
             <p><strong style="color: #333;">Origin:</strong> <span style="color: #555;">${origin}</span></p>
-            <p><strong style="color: #333;">Geolocation:</strong> <span style="color: #555;">${geolocation}</span></p>
             <p><strong style="color: #333;">Time of Submission:</strong> <span style="color: #555;">${timeOfSubmission}</span></p>
           </div>
 
