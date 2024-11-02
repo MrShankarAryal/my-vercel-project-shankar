@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book an Appointment</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: white;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 16px;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    button {
+      background: #0070f3;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      width: 100%;
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    button.secondary {
+      background: transparent;
+      border: 1px solid #0070f3;
+      color: #0070f3;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .alert {
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alert.error {
+      background-color: #fee2e2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+    }
+
+    .alert.success {
+      background-color: #dcfce7;
+      color: #16a34a;
+      border: 1px solid #bbf7d0;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .step {
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    .success-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 16px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Book an Appointment</h1>
+      <p id="step-description">Enter your details to get started</p>
+    </div>
+
+    <div id="alert" style="display: none;"></div>
+
+    <!-- Step 1: Contact Information -->
+    <div id="step1" class="step active">
+      <form id="contactForm">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" required>
+        </div>
+
+        <div class="form-group">
+          <label>Contact Method</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="contactMethod" value="whatsapp" checked>
+              WhatsApp
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="contactMethod" value="googleChat">
+              Google Chat
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="contactId" id="contactIdLabel">WhatsApp Number</label>
+          <input type="text" id="contactId" required>
+        </div>
+
+        <button type="submit" id="submitContact">
+          <span>Send Verification Code</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Step 2: Verification Code -->
+    <div id="step2" class="step">
+      <form id="verificationForm">
+        <div class="form-group">
+          <label for="verificationCode">Enter Verification Code</label>
+          <input type="text" id="verificationCode" required>
+        </div>
+
+        <div class="button-group">
+          <button type="button" class="secondary" onclick="goToStep(1)">Back</button>
+          <button type="submit">Verify Code</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Step 3: Appointment Details -->
+    <div id="step3" class="step">
+      <form id="appointmentForm">
+        <div class="form-group">
+          <label for="date">Select Date</label>
+          <input type="date" id="date" required>
+        </div>
+
+        <div class="form-group">
+          <label for="time">Select Time</label>
+          <select id="time" required>
+            <option value="">Select a time</option>
+            <option value="09:00">9:00 AM</option>
+            <option value="10:00">10:00 AM</option>
+            <option value="11:00">11:00 AM</option>
+            <option value="12:00">12:00 PM</option>
+            <option value="14:00">2:00 PM</option>
+            <option value="15:00">3:00 PM</option>
+            <option value="16:00">4:00 PM</option>
+            <option value="17:00">5:00 PM</option>
+          </select>
+        </div>
+
+        <div class="button-group">
+          <button type="button" class="secondary" onclick="goToStep(2)">Back</button>
+          <button type="submit">Book Appointment</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Step 4: Success -->
+    <div id="step4" class="step">
+      <svg class="success-icon" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M22 4L12 14.01l-3-3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div style="text-align: center;">
+        <h3 style="margin-bottom: 8px;">Booking Confirmed!</h3>
+        <p style="color: #666; margin-bottom: 24px;">
+          Check your email for appointment details.
+        </p>
+        <button onclick="resetForm()">Book Another Appointment</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State management
+    let currentStep = 1;
+    const formData = {
+      name: '',
+      email: '',
+      contactMethod: 'whatsapp',
+      contactId: '',
+      verificationCode: '',
+      date: '',
+      time: ''
+    };
+
+    // DOM Elements
+    const stepDescription = document.getElementById('step-description');
+    const alertEl = document.getElementById('alert');
+    const contactIdLabel = document.getElementById('contactIdLabel');
+    const contactIdInput = document.getElementById('contactId');
+
+    // Initialize date input min value
+    document.getElementById('date').min = new Date().toISOString().split('T')[0];
+
+    // Event Listeners
+    document.querySelectorAll('input[name="contactMethod"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        contactIdLabel.textContent = e.target.value === 'whatsapp' ? 'WhatsApp Number' : 'Google Chat ID';
+        contactIdInput.placeholder = e.target.value === 'whatsapp' ? '+1234567890' : 'user@example.com';
+        formData.contactMethod = e.target.value;
+      });
+    });
+
+    // Form Submissions
+    document.getElementById('contactForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      formData.name = document.getElementById('name').value;
+      formData.email = document.getElementById('email').value;
+      formData.contactId = document.getElementById('contactId').value;
+
+      try {
+        setLoading(true);
+        const response = await fetch('/api/appointment.js/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Verification failed');
+        }
+
+        showAlert('Verification code sent successfully!', 'success');
+        goToStep(2);
+      } catch (error) {
+        showAlert(error.message, 'error');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    document.getElementById('verificationForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      formData.verificationCode = document.getElementById('verificationCode').value;
+
+      try {
+        setLoading(true);
+        const response = await fetch('/api/appointment.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contactId: formData.contactId,
+            code: formData.verificationCode
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Code verification failed');
+        }
+
+        showAlert('Verification successful!', 'success');
+        goToStep(3);
+      } catch (error) {
+        showAlert(error.message, 'error');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    document.getElementById('appointmentForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      formData.date = document.getElementById('date').value;
+      formData.time = document.getElementById('time').value;
+
+      try {
+        setLoading(true);
+        const response = await fetch('/api/book', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contactId: formData.contactId,
+            date: formData.date,
+            time: formData.time
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Booking failed');
+        }
+
+        goToStep(4);
+      } catch (error) {
+        showAlert(error.message, 'error');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    // Utility Functions
+    function goToStep(step) {
+      document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+      document.getElementById(`step${step}`).classList.add('active');
+      currentStep = step;
+      
+      const descriptions = {
+        1: 'Enter your details to get started',
+        2: 'Enter the verification code sent to your contact method',
+        3: 'Select your preferred appointment time',
+        4: 'Booking confirmed'
+      };
+      
+      stepDescription.textContent = descriptions[step];
+      hideAlert();
+    }
+
+    function showAlert(message, type) {
+      alertEl.className = `alert ${type}`;
+      alertEl.innerHTML = type === 'error' 
+        ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>${message}`
+        : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>${message}`;
+      alertEl.style.display = 'flex';
+    }
+
+    function hideAlert() {
+      alertEl.style.display = 'none';
+    }
+
+    function setLoading(isLoading) {
+      const currentForm = document.querySelector(`#step${currentStep} form`);
+      const button = currentForm.querySelector('button[type="submit"]');
+      
+      if (isLoading) {
+        button.disabled = true;
+        button.innerHTML = '<span class="loading"></span>Loading...';
+      } else {
+        button.disabled = false;
+        button.innerHTML = button.textContent;
+      }
+    }
+
+    function resetForm() {
+      // Reset form data
+      Object.keys(formData).forEach(key => formData[key] = '');
+      formData.contactMethod = 'whatsapp';
+
+      // Reset form inputs
+      document.querySelectorAll('input:not([type="radio"])').forEach(input => input.value = '');
+      document.querySelectorAll('select').forEach(select => select.value = '');
+      document.querySelector('input[value="whatsapp"]').checked = true;
+
+      // Reset to first step
+      goToStep(1);
+    }
+  </script>
+</body>
+</html>
