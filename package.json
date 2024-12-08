@@ -15,9 +15,9 @@
     "ua-parser-js": "^1.0.35",
     "node-fetch": "^3.2.6",
     "express-rate-limit": "^7.2.0",
-    "uuid": "^8.3.2", // Added uuid
-    "dompurify": "^2.3.0", // Added dompurify
-    "jsdom": "^22.1.0" // Added jsdom
+    "uuid": "^8.3.2", 
+    "dompurify": "^2.3.0", 
+    "jsdom": "^22.1.0" 
   },
   "env": {
     "EMAIL_USER": "shankararyal737@gmail.com",
