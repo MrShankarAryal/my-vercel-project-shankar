@@ -14,12 +14,13 @@ const rateLimiter = (ip, browser, device) => {
   if (!requestLog[key]) {
     requestLog[key] = {
       count: 1,
-      lastRequestTime: Date.now(),
+      lastRequestTime: Date.now(), 
+      blockedUntil: 0 
     };
     return true; // Allow the request
   }
 
-  const { count, lastRequestTime } = requestLog[key];
+  const { count, lastRequestTime, blockedUntil } = requestLog[key];
 
   // If block time has passed, reset count
   if (Date.now() - lastRequestTime > BLOCK_TIME) {
