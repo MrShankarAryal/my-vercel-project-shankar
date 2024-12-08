@@ -13,15 +13,10 @@
   "dependencies": {
     "nodemailer": "^6.7.2",
     "ua-parser-js": "^1.0.35",
-    "node-fetch": "^3.2.6"
-  },
-   "env": {
-    "EMAIL_USER": "shankararyal737@gmail.com",
-    "EMAIL_PASS": "bvoa aojz oxjb kpng",
-    "WHATSAPP_TOKEN": "@whatsapp_token",
-    "WHATSAPP_PHONE_NUMBER_ID": "@whatsapp_phone_number_id",
-    "GOOGLE_CHAT_TOKEN": "@google_chat_token"
+    "dotenv": "^10.0.0" 
   },
   "engines": {
     "node": "20.x"
   }
+}
+
