@@ -78,11 +78,6 @@ export default async function handler(req, res) {
       const device = parser.getDevice();
       const engine = parser.getEngine();
       
-      // Geolocation data (example using a hypothetical service)
-      const geoData = await fetch(`https://ipapi.co/${ip}/json/`)
-        .then(res => res.json())
-        .catch(() => ({}));
-
       // Rate limiting with IP + UA combination
       if (!rateLimiter(ip, userAgent)) {
         console.warn(`Rate limit exceeded for ${ip} - ${userAgent}`);
@@ -116,8 +111,7 @@ export default async function handler(req, res) {
 
           <div style="margin-top: 20px; background: #fff; padding: 20px; border-radius: 8px;">
             <h3>🔍 Technical Details</h3>
-            <p><strong>IP Address:</strong> ${ip} (${geoData.country_name || 'Unknown'})</p>
-            <p><strong>Location:</strong> ${geoData.city || 'Unknown'}, ${geoData.region || 'Unknown'}</p>
+            <p><strong>IP Address:</strong> ${ip}</p>
             <p><strong>Browser:</strong> ${browser.name} ${browser.version}</p>
             <p><strong>OS:</strong> ${os.name} ${os.version}</p>
             <p><strong>Device:</strong> ${device.vendor || 'Unknown'} ${device.model || 'Unknown'} (${device.type || 'Unknown'})</p>
