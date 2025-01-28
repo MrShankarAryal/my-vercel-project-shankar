@@ -34,7 +34,7 @@ const rateLimiter = (ip, userAgent) => {
 
 export default async function handler(req, res) {
   // Secure CORS configuration (update origin to your domain)
-  res.setHeader('Access-Control-Allow-Origin', 'https://shankararyal404.com.np');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Max-Age', '86400');
