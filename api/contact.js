@@ -4,7 +4,7 @@ import UAParser from 'ua-parser-js';
 // In-memory store for rate limiting (this can be replaced with a database for persistence)
 const requestLog = {};
 
-const MAX_REQUESTS = 5;
+const MAX_REQUESTS = 2;
 const BLOCK_TIME = 60 * 1000; // Block for 1 minute
 
 // Function to check and update request counts
